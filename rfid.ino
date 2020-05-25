@@ -29,14 +29,15 @@ const int aH = 880;
 */
 
  
-#define buzzerPin  8
+#define buzzerPin  10
 
-#define RedLED 22
-#define GreenLED 23
+#define RedLED 5
+#define GreenLED 7
+#define YellowLED 6
 
-#define Button1 5
-#define Button2 6
-#define Button3 7
+#define Button1 11
+#define Button2 12
+#define Button3 13
 
 #define SizeOfTag 4 //How many hex values are stored in one tag
 //TODO change that to use the uid.tagsize function
@@ -45,8 +46,8 @@ const int aH = 880;
 
 
 //data pins for the RFID reader
-#define SS_PIN 10
-#define RST_PIN 9
+#define SS_PIN 9
+#define RST_PIN 8
 
 MFRC522 mfrc522(SS_PIN, RST_PIN);   // Create MFRC522(tag reader) instance.
 
@@ -120,7 +121,7 @@ bool IsTagValid() {
   if(mfrc522.uid.size != SizeOfTag) {
     return 0;
   }
-  for(byte TagNum = 0; TagNum < NumOfTags); TagNum++){
+  for(byte TagNum = 0; TagNum < NumOfTags; TagNum++){
     Serial.print("testing tag number: ");
     Serial.print(TagNum);
     Serial.print("         With a hex value: ");
@@ -129,7 +130,7 @@ bool IsTagValid() {
       byte TestedByte = EEPROM.read((TagNum*SizeOfTag)+SequencialByte); //we load the EEPROM value in the ram for faster operations
       Serial.print(TestedByte, HEX);
       Serial.print(" ");
-      if(mfrc522.uid.uidByte[TestedByte] == TestedByte){
+      if(mfrc522.uid.uidByte[SequencialByte] == TestedByte){
         if(SequencialByte == SizeOfTag-1) {
           Serial.println("Tag recognized");
           return 1;
